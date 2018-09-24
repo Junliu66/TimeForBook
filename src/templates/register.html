@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+<body class="wallpaper">
+    <div class="header">
+        <h1>Time For Book</h1>
+        <p>Reading is to the mind what exercise is to the body. —Joseph Addison</p>
+    </div>
+    <div class="container page-form">
+        <form id="register-form" action="/auth/register" method="post">
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" id="name" class="form-control" name="name">
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="text" id="email" class="form-control" name="email">
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" class="form-control" name="password">
+            </div>
+            <button type="submit" class="btn btn-success">Sign up</button>
+        </form>
+    </div>
+</body>
+{% endblock %}
