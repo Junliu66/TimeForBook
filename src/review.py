@@ -29,5 +29,5 @@ class Review(object):
         return cls(**review_data)
 
     @staticmethod
-    def from_blog(id):
+    def from_book(id):
         return [review for review in Database.find('reviews', query={'book_id': id})]

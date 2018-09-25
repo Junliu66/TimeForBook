@@ -4,6 +4,7 @@ from flask import Flask, render_template, request, session, make_response, url_f
 
 from src.database import Database
 from src.book import Book
+from src.review import Review
 from src.user import User
 
 app = Flask(__name__)
@@ -45,8 +46,12 @@ def initialize_database():
     Database.initialize()
 
 
-@app.route('/auth/login', methods=['POST'])
+@app.route('/auth/login', methods=['GET', 'POST'])
 def login_user():
+    if request.method == 'GET':
+        user = User.get_by_email(session['email'])
+        return render_template("profile.html", name=User.get_name(user.email), email=session['email'])
+
     email = request.form['email']
     password = request.form['password']
 
@@ -59,7 +64,7 @@ def login_user():
     return render_template("profile.html", name=User.get_name(email), email=session['email'])
 
 
-@app.route('/auth/register', methods=['POST'])
+@app.route('/auth/register', methods=['GET', 'POST'])
 def register_user():
     name = request.form['name']
     email = request.form['email']
@@ -80,15 +85,7 @@ def user_books(user_id=None):
 
     books = user.get_books()
 
-    return render_template("user_books.html", books=books, email=user.email)
-
-
-@app.route('/reviews/<string:book_id>')
-def book_reviews(blog_id):
-    book = Book.from_mongo(blog_id)
-    reviews = book.get_reviews()
-
-    return render_template('reviews.html', reviews=reviews, book_name=book.name, book_id=book._id)
+    return render_template("user_books.html", books=books, name=User.get_name(user.email), email=user.email)
 
 
 @app.route('/books/new', methods=['POST', 'GET'])
@@ -105,16 +102,24 @@ def create_new_book():
         return make_response(user_books(user._id))
 
 
+@app.route('/reviews/<string:book_id>', methods=['POST', 'GET'])
+def book_reviews(book_id):
+    book = Book.from_mongo(book_id)
+    reviews = book.get_reviews()
+
+    return render_template('reviews.html', reviews=reviews, book_name=book.book_name, book_id=book._id)
+
+
 @app.route('/reviews/new/<string:book_id>', methods=['POST', 'GET'])
 def create_new_review(book_id):
     if request.method == 'GET':
-        return render_template('new_review.html')
+        return render_template('new_review.html', book_id=book_id)
     else:
         title = request.form['title']
         content = request.form['content']
         user = User.get_by_email(session['email'])
 
-        new_review = Book(book_id, title, content, user.email)
+        new_review = Review(book_id, title, content, user.email)
         new_review.save_to_mongo()
 
         return make_response(book_reviews(book_id))

@@ -42,3 +42,29 @@
 .btn {
     margin-top: 25px;
 }
+
+#logo-img {
+  background: url('/static/assets/lake.png') no-repeat;
+  width: 150px;
+  height: 150px;
+  margin: 10px 15px 10px 0;
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    border: 1px solid #e7e7e7;
+    background-color: #f3f3f3;
+}
+
+.content-title {
+    width: 70%;
+}
+
+.content {
+    height: 100vh;
+    width: 100%;
+    background-color: #F0FFFF;
+}

@@ -58,9 +58,9 @@ class User(object):
     def get_books(self):
         return Book.find_by_author_id(self._id)
 
-    def new_book(self, title):
+    def new_book(self, book_name):
         book = Book(author=self.email,
-                    title=title,
+                    book_name=book_name,
                     author_id=self._id)
         book.save_to_mongo()
 
